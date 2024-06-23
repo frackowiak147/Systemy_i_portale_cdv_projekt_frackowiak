@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gra w Statki - Wprowadzenie Graczy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gra w Statki</h1>
+        </div>
+        <div class="content">
+            <form id="playerForm" action="process.php" method="post">
+                <div class="form-group">
+                    <label for="gracz1Name">Wprowadź nazwę gracza 1:</label>
+                    <input type="text" id="gracz1Name" name="gracz1Name" class="input-field" required>
+                </div>
+                <div class="form-group">
+                    <label for="gracz2Name">Wprowadź nazwę gracza 2:</label>
+                    <input type="text" id="gracz2Name" name="gracz2Name" class="input-field" required>
+                </div>
+                <button type="submit" class="button">Zatwierdź</button>
+            </form>
+        </div>
+    </div>
+    <script src="plansze.js"></script>
+</body>
+
+</html>
