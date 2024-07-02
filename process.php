@@ -1,5 +1,22 @@
 <?php
 echo "cos";
+<?php
+// PHP Data Objects(PDO) Sample Code:
+try {
+    $conn = new PDO("sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk", "jfrackowiak@edu.cdv.pl", "qM@83Ha8WkB");
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch (PDOException $e) {
+    print("Error connecting to SQL Server.");
+    die(print_r($e));
+}
+
+// SQL Server Extension Sample Code:
+$connectionInfo = array("UID" => "jfrackowiak@edu.cdv.pl@developerlife2", "pwd" => "qM@83Ha8WkB", "Database" => "kolko-krzyzyk", "LoginTimeout" => 30, "Encrypt" => 1, "TrustServerCertificate" => 0);
+$serverName = "tcp:developerlife2.database.windows.net,1433";
+$conn = sqlsrv_connect($serverName, $connectionInfo);
+?>
+////////////////////////////////
 /*
 $servername = "tcp:developerlife2.database.windows.net,1433";
 $username = "jfrackowiak@edu.cdv.pl";
@@ -32,6 +49,4 @@ if ($result->num_rows > 0) {
 $conn->close();
 */
 
-
-?>
 
