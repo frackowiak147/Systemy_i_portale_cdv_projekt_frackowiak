@@ -1,6 +1,5 @@
 <?php
 echo "cos";
-<?php
 // PHP Data Objects(PDO) Sample Code:
 try {
     $conn = new PDO("sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk", "jfrackowiak@edu.cdv.pl", "qM@83Ha8WkB");
@@ -16,7 +15,7 @@ $connectionInfo = array("UID" => "jfrackowiak@edu.cdv.pl@developerlife2", "pwd" 
 $serverName = "tcp:developerlife2.database.windows.net,1433";
 $conn = sqlsrv_connect($serverName, $connectionInfo);
 ?>
-////////////////////////////////
+
 /*
 $servername = "tcp:developerlife2.database.windows.net,1433";
 $username = "jfrackowiak@edu.cdv.pl";
