@@ -2,13 +2,14 @@
 echo "cos";
 
 try {
-    $dsn = "sqlsrv:server = developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
+    $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
     $username = "jfrackowiak"; // Spróbuj użyć tylko nazwy użytkownika, bez domeny
     $password = "qM@83Ha8WkB";
 
     // Tworzenie nowego połączenia PDO
     $conn = new PDO($dsn, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   
 
     // Zapytanie SQL
     $sql = "SELECT TOP 2 * FROM gracze ORDER BY id DESC";
