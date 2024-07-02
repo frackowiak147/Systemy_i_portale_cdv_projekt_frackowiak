@@ -1,4 +1,6 @@
 <?php
+echo "cos";
+/*
 $servername = "tcp:developerlife2.database.windows.net,1433";
 $username = "jfrackowiak@edu.cdv.pl";
 $password = "qM@83Ha8WkB";
@@ -12,7 +14,7 @@ if ($conn->connect_error) {
 }
 
 echo "connected succesfully";
-/*
+
 $sql = "SELECT * FROM gracze ORDER BY id DESC LIMIT 2";
 $result = $conn->query($sql);
 
@@ -29,5 +31,7 @@ if ($result->num_rows > 0) {
 
 $conn->close();
 */
+
+
 ?>
 
