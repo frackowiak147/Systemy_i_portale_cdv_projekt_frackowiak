@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "statki";
+$servername = "tcp:developerlife2.database.windows.net,1433";
+$username = "jfrackowiak@edu.cdv.pl";
+$password = "qM@83Ha8WkB";
+$dbname = "kolko-krzyzyk";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
