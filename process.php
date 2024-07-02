@@ -2,7 +2,7 @@
 echo "cos";
 
 try {
-    $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
+    $dsn = "sqlsrv:server = developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
     $username = "jfrackowiak@edu.cdv.pl"; // Spróbuj użyć tylko nazwy użytkownika, bez domeny
     $password = "qM@83Ha8WkB";
 
