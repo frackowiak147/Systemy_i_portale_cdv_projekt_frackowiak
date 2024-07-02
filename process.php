@@ -8,8 +8,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     die("Błąd połączenia: " . $conn->connect_error);
+
 }
 
+echo "connected succesfully";
+/*
 $sql = "SELECT * FROM gracze ORDER BY id DESC LIMIT 2";
 $result = $conn->query($sql);
 
@@ -25,4 +28,6 @@ if ($result->num_rows > 0) {
 }
 
 $conn->close();
+*/
 ?>
+
