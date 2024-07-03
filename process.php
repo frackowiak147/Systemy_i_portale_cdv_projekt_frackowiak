@@ -1,37 +1,32 @@
 <?php
-echo "cos";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Ustawienia bazy danych
+        $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
+        $username = "jfrackowiak@edu.cdv.pl@developerlife2"; // Upewnij się, że użytkownik ma odpowiednie uprawnienia
+        $password = "qM@83Ha8WkB";
 
-try {
-    $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
-    $username = "jfrackowiak@edu.cdv.pl@developerlife2"; // Spróbuj użyć tylko nazwy użytkownika, bez domeny
-    $password = "qM@83Ha8WkB";
+        // Tworzenie nowego połączenia PDO
+        $conn = new PDO($dsn, $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Tworzenie nowego połączenia PDO
-    $conn = new PDO($dsn, $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-   
+        // Pobieranie danych z formularza
+        $gracz1Name = $_POST['gracz1Name'];
+        $gracz2Name = $_POST['gracz2Name'];
 
-    // Zapytanie SQL
-    $sql = "SELECT TOP 2 * FROM gracze ORDER BY id DESC";
-    $stmt = $conn->query($sql);
-    
-    // Fetchowanie danych
-    $gracze = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Dodawanie nazw graczy do bazy danych
+        $stmt = $conn->prepare("INSERT INTO gracze (nazwa) VALUES (:gracz1Name), (:gracz2Name)");
+        $stmt->bindParam(':gracz1Name', $gracz1Name);
+        $stmt->bindParam(':gracz2Name', $gracz2Name);
+        $stmt->execute();
 
-    if (count($gracze) > 0) {
-        $response = array(
-            'gracz1' => isset($gracze[0]['nazwa']) ? $gracze[0]['nazwa'] : 'Brak nazwy',
-            'gracz2' => isset($gracze[1]['nazwa']) ? $gracze[1]['nazwa'] : 'Brak nazwy'
-        );
-        echo json_encode($response);
-    } else {
-        echo json_encode(array('error' => 'Brak danych'));
+        // Przekierowanie do strony gry z nazwami graczy w parametrach URL
+        header("Location: gra.html?gracz1=" . urlencode($gracz1Name) . "&gracz2=" . urlencode($gracz2Name));
+        exit();
+    } catch (PDOException $e) {
+        echo "Błąd połączenia: " . $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo "Błąd połączenia: " . $e->getMessage();
+} else {
+    echo "Nieprawidłowe żądanie";
 }
 ?>
-
-
-
-
