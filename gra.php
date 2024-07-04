@@ -1,37 +1,38 @@
 <?php
-if (isset($_GET['gameId'])) {
+if (isset($_GET['gameId']) && isset($_GET['player'])) {
     $gameId = $_GET['gameId'];
+    $player = $_GET['player'];
+
+    try {
+        $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
+        $username = "jfrackowiak@edu.cdv.pl@developerlife2";
+        $password = "qM@83Ha8WkB";
+        $conn = new PDO($dsn, $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $conn->prepare("SELECT gracz1, gracz2 FROM gry WHERE game_id = :gameId");
+        $stmt->bindParam(':gameId', $gameId);
+        $stmt->execute();
+
+        $gameData = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($gameData) {
+            $gracz1Name = $gameData['gracz1'];
+            $gracz2Name = $gameData['gracz2'];
+        } else {
+            echo "Nie znaleziono gry.";
+            exit();
+        }
+    } catch (PDOException $e) {
+        echo "Błąd połączenia: " . $e->getMessage();
+        exit();
+    }
 } else {
     echo "Nieprawidłowy link.";
     exit();
 }
 
-// Połączenie z bazą danych
-try {
-    $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
-    $username = "jfrackowiak@edu.cdv.pl@developerlife2";
-    $password = "qM@83Ha8WkB";
-    $conn = new PDO($dsn, $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Pobieranie nazw graczy
-    $stmt = $conn->prepare("SELECT nazwa FROM gracze WHERE gra_id = :gameId ORDER BY id ASC");
-    $stmt->bindParam(':gameId', $gameId);
-    $stmt->execute();
-
-    $gracze = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if (count($gracze) >= 2) {
-        $gracz1Name = $gracze[0]['nazwa'];
-        $gracz2Name = $gracze[1]['nazwa'];
-    } else {
-        $gracz1Name = "Gracz 1";
-        $gracz2Name = "Gracz 2";
-    }
-} catch (PDOException $e) {
-    echo "Błąd połączenia: " . $e->getMessage();
-    exit();
-}
+$symbol = ($player == 1) ? 'O' : 'X';
+$graczName = ($player == 1) ? $gracz1Name : $gracz2Name;
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +42,28 @@ try {
     <meta charset="UTF-8">
     <title>Gra w Kółko i Krzyżyk</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        const gameId = "<?php echo $gameId; ?>";
+        const player = "<?php echo $player; ?>";
+        const symbol = "<?php echo $symbol; ?>";
+
+        function zaznaczPole(pole) {
+            fetch('game_process.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gameId: gameId, pole: pole, symbol: symbol })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('pole' + pole).innerText = symbol;
+                        document.getElementById('komunikatWygranej').innerText = data.message;
+                    } else {
+                        alert(data.message);
+                    }
+                });
+        }
+    </script>
 </head>
 
 <body>
@@ -50,8 +73,7 @@ try {
             <button class="exit-button" onclick="window.location.href='index.html'">X</button>
         </div>
         <div class="content">
-            <h2 id="gracz1" class="nazwa-gracza"><?php echo htmlspecialchars($gracz1Name); ?></h2>
-            <h2 id="gracz2" class="nazwa-gracza"><?php echo htmlspecialchars($gracz2Name); ?></h2>
+            <h2><?php echo htmlspecialchars($graczName); ?>, grasz symbolem <?php echo $symbol; ?></h2>
             <div class="plansza-krzyzyk-container">
                 <div class="plansza-krzyzyk">
                     <div id="pole1" class="pole" onclick="zaznaczPole(1)"></div>
@@ -67,10 +89,8 @@ try {
             </div>
             <div id="komunikatWygranej" class="komunikat"></div>
             <button id="przyciskNowaGra" class="button" onclick="nowaGra()" style="display:none;">Nowa Gra</button>
-            <button id="przyciskNastepnyGracz" class="button" onclick="następnyGracz()">Następny Gracz</button>
         </div>
     </div>
-    <script src="gra.js"></script>
 </body>
 
 </html>

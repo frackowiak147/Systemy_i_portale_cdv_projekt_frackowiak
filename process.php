@@ -8,9 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conn = new PDO($dsn, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Usunięcie wszystkich rekordów z tabeli gracze
-        $conn->exec("TRUNCATE TABLE gracze");
-
         $gracz1Name = $_POST['gracz1Name'];
         $gracz2Name = $_POST['gracz2Name'];
 
@@ -18,23 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $gameId = uniqid();
 
         // Dodawanie nazw graczy do bazy danych
-        $stmt1 = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz1Name, :gameId)");
-        $stmt2 = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz2Name, :gameId)");
+        $stmt = $conn->prepare("INSERT INTO gry (game_id, gracz1, gracz2) VALUES (:gameId, :gracz1Name, :gracz2Name)");
+        $stmt->bindParam(':gameId', $gameId);
+        $stmt->bindParam(':gracz1Name', $gracz1Name);
+        $stmt->bindParam(':gracz2Name', $gracz2Name);
+        $stmt->execute();
 
-        $stmt1->bindParam(':gracz1Name', $gracz1Name);
-        $stmt1->bindParam(':gameId', $gameId);
+        // Generowanie linków dla graczy
+        $gracz1Link = "gra.php?gameId=" . urlencode($gameId) . "&player=1";
+        $gracz2Link = "gra.php?gameId=" . urlencode($gameId) . "&player=2";
 
-        $stmt2->bindParam(':gracz2Name', $gracz2Name);
-        $stmt2->bindParam(':gameId', $gameId);
-
-        $stmt1->execute();
-        $stmt2->execute();
-
-        // Generowanie linku dla gracza 2
-        $gameLink = "https://your-app-service.azurewebsites.net/join.php?gameId=" . urlencode($gameId);
-
-        // Przekierowanie gracza 1 do planszy gry
-        header("Location: gra.php?gameId=" . urlencode($gameId) . "&gracz1=" . urlencode($gracz1Name));
+        // Przekierowanie do strony z linkami do gry
+        header("Location: links.php?gracz1Link=" . urlencode($gracz1Link) . "&gracz2Link=" . urlencode($gracz2Link));
         exit();
     } catch (PDOException $e) {
         echo "Błąd połączenia: " . $e->getMessage();
