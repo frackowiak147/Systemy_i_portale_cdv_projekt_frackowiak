@@ -2,10 +2,11 @@
 if (isset($_GET['gameId'])) {
     $gameId = $_GET['gameId'];
 } else {
-    echo "Brak ważnego ID gry.";
+    echo "Nieprawidłowy link.";
     exit();
 }
 
+// Połączenie z bazą danych
 try {
     $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
     $username = "jfrackowiak@edu.cdv.pl@developerlife2";
@@ -13,24 +14,24 @@ try {
     $conn = new PDO($dsn, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Pobieranie nazw graczy na podstawie ID gry
-    $stmt = $conn->prepare("SELECT nazwa FROM gracze WHERE gra_id = :gameId ORDER BY id");
+    // Pobieranie nazw graczy
+    $stmt = $conn->prepare("SELECT nazwa FROM gracze WHERE gra_id = :gameId ORDER BY id ASC");
     $stmt->bindParam(':gameId', $gameId);
     $stmt->execute();
+
     $gracze = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (count($gracze) >= 2) {
         $gracz1Name = $gracze[0]['nazwa'];
         $gracz2Name = $gracze[1]['nazwa'];
     } else {
-        echo "Brak wystarczającej liczby graczy.";
-        exit();
+        $gracz1Name = "Gracz 1";
+        $gracz2Name = "Gracz 2";
     }
 } catch (PDOException $e) {
     echo "Błąd połączenia: " . $e->getMessage();
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -69,7 +70,6 @@ try {
             <button id="przyciskNastepnyGracz" class="button" onclick="następnyGracz()">Następny Gracz</button>
         </div>
     </div>
-
     <script src="gra.js"></script>
 </body>
 

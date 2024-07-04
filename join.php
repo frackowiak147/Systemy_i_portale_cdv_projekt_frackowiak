@@ -2,7 +2,7 @@
 if (isset($_GET['gameId'])) {
     $gameId = $_GET['gameId'];
 } else {
-    echo "Brak ważnego ID gry.";
+    echo "Nieprawidłowy link.";
     exit();
 }
 ?>
@@ -12,17 +12,17 @@ if (isset($_GET['gameId'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Dołącz do Gry</title>
+    <title>Dołącz do gry</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>Dołącz do Gry</h1>
+            <h1>Dołącz do gry w Kolko i Krzyzyk</h1>
         </div>
         <div class="content">
-            <form id="joinForm" action="start_game.php" method="post">
+            <form action="join_process.php" method="post">
                 <input type="hidden" name="gameId" value="<?php echo htmlspecialchars($gameId); ?>">
                 <div class="form-group">
                     <label for="gracz2Name">Wprowadź swoją nazwę:</label>
