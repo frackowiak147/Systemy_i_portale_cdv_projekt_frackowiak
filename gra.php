@@ -23,6 +23,9 @@ try {
     echo "Błąd połączenia: " . $e->getMessage();
     exit();
 }
+
+$gracz1Name = isset($_GET['gracz1']) ? htmlspecialchars($_GET['gracz1']) : "Gracz 1";
+$gracz2Name = isset($_GET['gracz2']) ? htmlspecialchars($_GET['gracz2']) : "Gracz 2";
 ?>
 
 <!DOCTYPE html>
