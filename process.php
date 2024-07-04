@@ -1,32 +1,30 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
+        // Ustawienia bazy danych
         $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
-        $username = "jfrackowiak@edu.cdv.pl@developerlife2";
+        $username = "jfrackowiak@edu.cdv.pl@developerlife2"; // Upewnij się, że użytkownik ma odpowiednie uprawnienia
         $password = "qM@83Ha8WkB";
 
+        // Tworzenie nowego połączenia PDO
         $conn = new PDO($dsn, $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        // Usunięcie wszystkich rekordów z tabeli gracze
+        $conn->exec("TRUNCATE TABLE gracze");
+
+        // Pobieranie danych z formularza
         $gracz1Name = $_POST['gracz1Name'];
         $gracz2Name = $_POST['gracz2Name'];
 
-        // Generowanie unikalnego ID gry
-        $gameId = uniqid();
-
         // Dodawanie nazw graczy do bazy danych
-        $stmt = $conn->prepare("INSERT INTO gry (game_id, gracz1, gracz2) VALUES (:gameId, :gracz1Name, :gracz2Name)");
-        $stmt->bindParam(':gameId', $gameId);
+        $stmt = $conn->prepare("INSERT INTO gracze (nazwa) VALUES (:gracz1Name), (:gracz2Name)");
         $stmt->bindParam(':gracz1Name', $gracz1Name);
         $stmt->bindParam(':gracz2Name', $gracz2Name);
         $stmt->execute();
 
-        // Generowanie linków dla graczy
-        $gracz1Link = "gra.php?gameId=" . urlencode($gameId) . "&player=1";
-        $gracz2Link = "gra.php?gameId=" . urlencode($gameId) . "&player=2";
-
-        // Przekierowanie do strony z linkami do gry
-        header("Location: links.php?gracz1Link=" . urlencode($gracz1Link) . "&gracz2Link=" . urlencode($gracz2Link));
+        // Przekierowanie do strony gry z nazwami graczy w parametrach URL
+        header("Location: gra.php?gracz1=" . urlencode($gracz1Name) . "&gracz2=" . urlencode($gracz2Name));
         exit();
     } catch (PDOException $e) {
         echo "Błąd połączenia: " . $e->getMessage();
