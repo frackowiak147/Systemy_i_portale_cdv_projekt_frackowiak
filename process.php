@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $gracz2DB = $gracze[1]['nazwa'];
 
             // Przekierowanie do strony gry z nazwami graczy pobranymi z bazy danych
-            header("Location: gra.html?gracz1=" . urlencode($gracz1DB) . "&gracz2=" . urlencode($gracz2DB));
+            header("Location: gra.php?gracz1=" . urlencode($gracz1DB) . "&gracz2=" . urlencode($gracz2DB));
             exit();
         }
     } catch (PDOException $e) {
