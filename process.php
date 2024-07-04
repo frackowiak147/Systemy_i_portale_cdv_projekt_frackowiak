@@ -17,14 +17,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $gracz1Name = $_POST['gracz1Name'];
         $gracz2Name = $_POST['gracz2Name'];
 
+        // Generowanie unikalnego ID gry
+        $gameId = uniqid();
+
         // Dodawanie nazw graczy do bazy danych
-        $stmt = $conn->prepare("INSERT INTO gracze (nazwa) VALUES (:gracz1Name), (:gracz2Name)");
+        $stmt = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz1Name, :gameId), (:gracz2Name, :gameId)");
         $stmt->bindParam(':gracz1Name', $gracz1Name);
         $stmt->bindParam(':gracz2Name', $gracz2Name);
+        $stmt->bindParam(':gameId', $gameId);
         $stmt->execute();
 
-        // Przekierowanie do strony gry z nazwami graczy w parametrach URL
-        header("Location: gra.php?gracz1=" . urlencode($gracz1Name) . "&gracz2=" . urlencode($gracz2Name));
+        // Generowanie linku dla gracza 2
+        $gameLink = "https://your-app-service.azurewebsites.net/join.php?gameId=" . urlencode($gameId);
+
+        // Przekierowanie do strony z linkiem do gry dla gracza 2
+        header("Location: link_do_gry.php?gameId=" . urlencode($gameId) . "&link=" . urlencode($gameLink));
         exit();
     } catch (PDOException $e) {
         echo "Błąd połączenia: " . $e->getMessage();

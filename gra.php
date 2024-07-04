@@ -1,5 +1,11 @@
 <?php
-// Połączenie z bazą danych
+if (isset($_GET['gameId'])) {
+    $gameId = $_GET['gameId'];
+} else {
+    echo "Brak ważnego ID gry.";
+    exit();
+}
+
 try {
     $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
     $username = "jfrackowiak@edu.cdv.pl@developerlife2";
@@ -7,25 +13,24 @@ try {
     $conn = new PDO($dsn, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Pobieranie nazw graczy
-    $stmt = $conn->query("SELECT nazwa FROM gracze");
+    // Pobieranie nazw graczy na podstawie ID gry
+    $stmt = $conn->prepare("SELECT nazwa FROM gracze WHERE gra_id = :gameId ORDER BY id");
+    $stmt->bindParam(':gameId', $gameId);
+    $stmt->execute();
     $gracze = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Sprawdzanie czy rekordy istnieją
     if (count($gracze) >= 2) {
         $gracz1Name = $gracze[0]['nazwa'];
         $gracz2Name = $gracze[1]['nazwa'];
     } else {
-        $gracz1Name = "Gracz 1"; // Domyślne wartości w przypadku braku danych
-        $gracz2Name = "Gracz 2";
+        echo "Brak wystarczającej liczby graczy.";
+        exit();
     }
 } catch (PDOException $e) {
     echo "Błąd połączenia: " . $e->getMessage();
     exit();
 }
 
-$gracz1Name = isset($_GET['gracz1']) ? htmlspecialchars($_GET['gracz1']) : "Gracz 1";
-$gracz2Name = isset($_GET['gracz2']) ? htmlspecialchars($_GET['gracz2']) : "Gracz 2";
 ?>
 
 <!DOCTYPE html>
