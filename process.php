@@ -20,12 +20,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Generowanie unikalnego ID gry
         $gameId = uniqid();
 
-        // Dodawanie nazw graczy do bazy danych
-        $stmt = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz1Name, :gameId), (:gracz2Name, :gameId)");
-        $stmt->bindParam(':gracz1Name', $gracz1Name);
-        $stmt->bindParam(':gracz2Name', $gracz2Name);
-        $stmt->bindParam(':gameId', $gameId);
-        $stmt->execute();
+        // Dodawanie nazw graczy do bazy danych w osobnych zapytaniach
+        $stmt1 = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz1Name, :gameId)");
+        $stmt2 = $conn->prepare("INSERT INTO gracze (nazwa, gra_id) VALUES (:gracz2Name, :gameId)");
+
+        $stmt1->bindParam(':gracz1Name', $gracz1Name);
+        $stmt1->bindParam(':gameId', $gameId);
+
+        $stmt2->bindParam(':gracz2Name', $gracz2Name);
+        $stmt2->bindParam(':gameId', $gameId);
+
+        $stmt1->execute();
+        $stmt2->execute();
 
         // Generowanie linku dla gracza 2
         $gameLink = "https://your-app-service.azurewebsites.net/join.php?gameId=" . urlencode($gameId);
