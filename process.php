@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtInsert->execute();
 
             // Przekierowanie do strony gry z nazwami graczy w parametrach URL
-            header("Location: gra.html?gracz1=" . urlencode($gracz1Name) . "&gracz2=" . urlencode($gracz2Name));
+            header("Location: gra.php?gracz1=" . urlencode($gracz1Name) . "&gracz2=" . urlencode($gracz2Name));
             exit();
         } else {
             // Jeśli są już rekordy, pobieramy je i przekierowujemy do gry
