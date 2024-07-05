@@ -120,7 +120,7 @@ function zapiszWynik(idWygranego) {
 // Funkcja resetująca grę
 function nowaGra() {
     window.location.reload();
-    window.location.href = 'index.html';
+    window.location.href = 'index2.html';
 }
 
 // Inicjalizacja gry
