@@ -41,7 +41,7 @@ $gracz2Name = isset($_GET['gracz2']) ? htmlspecialchars($_GET['gracz2']) : "Grac
     <div class="container">
         <div class="header">
             <h1>Gra w Kółko i Krzyżyk</h1>
-            <button class="exit-button" onclick="window.location.href='index2.html'">X</button>
+            <button class="exit-button" onclick="window.location.href='index.html'">X</button>
         </div>
         <div class="content">
             <h2 id="gracz1" class="nazwa-gracza"><?php echo htmlspecialchars($gracz1Name); ?></h2>
