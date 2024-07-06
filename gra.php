@@ -1,8 +1,8 @@
 <?php
 // Połączenie z bazą danych
 try {
-    $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
-    $username = "jfrackowiak@edu.cdv.pl@developerlife2";
+    $dsn = "sqlsrv:server = tcp:kolko-krzyzyk.database.windows.net,1433; Database = kolko_krzyzyk";
+    $username = "jfrackowiak@edu.cdv.pl@kolko-krzyzyk";
     $password = "qM@83Ha8WkB";
     $conn = new PDO($dsn, $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
