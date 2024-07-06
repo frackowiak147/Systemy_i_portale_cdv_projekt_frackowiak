@@ -2,8 +2,8 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         // Ustawienia bazy danych
-        $dsn = "sqlsrv:server = tcp:developerlife2.database.windows.net,1433; Database = kolko-krzyzyk";
-        $username = "jfrackowiak@edu.cdv.pl@developerlife2"; // Upewnij się, że użytkownik ma odpowiednie uprawnienia
+        $dsn = "sqlsrv:server = tcp:developerlife.database.windows.net,1433; Database = kolko-krzyzyk";
+        $username = "jfrackowiak@edu.cdv.pl@developerlife"; // Upewnij się, że użytkownik ma odpowiednie uprawnienia
         $password = "qM@83Ha8WkB";
 
         // Tworzenie nowego połączenia PDO
